@@ -1,8 +1,6 @@
 package com.amazon.ata.maps.partsdiscovery;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Helps expose key words from new editions of part catalogs.
@@ -16,8 +14,19 @@ public class DevicePartDiscovery {
      * @return A Map of words that appear in the catalog to the number of times they appear.
      */
     public Map<String, Integer> calculateWordCounts(PartCatalog catalog) {
-        // PARTICIPANTS: Implement calculateWordCounts()
-        return Collections.emptyMap();
+
+        Map<String, Integer> returnedMap = new HashMap<>();
+
+        for (String word : catalog.getCatalogWords()) {
+            if (returnedMap.containsKey(word)) {
+                returnedMap.put(word, returnedMap.get(word) + 1);
+            } else {
+                returnedMap.put(word, 1);
+            }
+
+        }
+
+        return returnedMap;
     }
 
     // --- Part B ---
@@ -27,7 +36,7 @@ public class DevicePartDiscovery {
      * @param wordCounts the map to remove the word from
      */
     public void removeWord(String word, Map<String, Integer> wordCounts) {
-        // PARTICIPANTS: Implement removeWord()
+        wordCounts.remove(word);
         return;
     }
 
@@ -38,8 +47,16 @@ public class DevicePartDiscovery {
      * @return The word that appears most frequently in the catalog to the number of times they appear.
      */
     public String getMostFrequentWord(Map<String, Integer> wordCounts) {
-        // PARTICIPANTS: Implement getMostFrequentWord()
-        return null;
+        Integer highestCount = 0;
+        String highestWord = "";
+
+        for (Map.Entry<String, Integer> entry : wordCounts.entrySet()) {
+            if (entry.getValue() > highestCount) {
+                highestCount = entry.getValue();
+                highestWord = entry.getKey();
+            }
+        }
+        return highestWord;
     }
 
     // --- Part D ---
@@ -52,7 +69,13 @@ public class DevicePartDiscovery {
      * @return a map associating each word with its TF-IDF score.
      */
     public Map<String, Double> getTfIdfScores(Map<String, Integer> wordCounts, Map<String, Double> idfScores) {
-        // PARTICIPANTS: Implement getTfIdfScores()
-        return Collections.emptyMap();
+
+        Map<String, Double> tfIdfScores = new TreeMap<>();
+
+        for (Map.Entry<String, Integer> anEntry : wordCounts.entrySet()) {
+            tfIdfScores.put(anEntry.getKey(), anEntry.getValue() * idfScores.get(anEntry.getKey()));
+        }
+
+        return tfIdfScores;
     }
 }
